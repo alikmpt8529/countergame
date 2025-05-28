@@ -1,10 +1,10 @@
 {
   "files": {
-    "main.css": "/static/css/main.968756e2.css",
-    "main.js": "/static/js/main.5a970962.js",
-    "index.html": "/index.html",
-    "main.968756e2.css.map": "/static/css/main.968756e2.css.map",
-    "main.5a970962.js.map": "/static/js/main.5a970962.js.map"
+    "main.css": "/countergame/static/css/main.968756e2.css",
+    "main.js": "/countergame/static/js/main.5a970962.js",
+    "index.html": "/countergame/index.html",
+    "main.968756e2.css.map": "/countergame/static/css/main.968756e2.css.map",
+    "main.5a970962.js.map": "/countergame/static/js/main.5a970962.js.map"
   },
   "entrypoints": [
     "static/css/main.968756e2.css",
