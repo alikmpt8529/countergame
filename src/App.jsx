@@ -1,36 +1,39 @@
 import { useState, useRef } from 'react'
 import './App.css'
-
+//ドットのサイズ、ドット間の距離、最大数を設定
 const DOT_SIZE = 20;
 const DOT_MARGIN = 5;
 const MAX_DOTS = 15;
 
 function App() {
   const [dots, setDots] = useState([]);
-  const [dotCount, setDotCount] = useState(0);
-  const [stopped, setStopped] = useState(false);
+  const [dotCount, setDotCount] = useState(0);//ドットの数を設定初期値は０
+  const [stopped, setStopped] = useState(false);//ストップ状態かどうかを監視、デフォルトではfalse
   const intervalRef = useRef(null);
-
+  //ここから先はスタートボタンを押した後の挙動を監視する
+  // 100ミリ秒ごとに次のドットを追加し、最大数に達したらアラートを表示する
   const start = () => {
     setDots([]);
     setDotCount(0);
     setStopped(false);
     if (intervalRef.current) clearInterval(intervalRef.current);
     intervalRef.current = setInterval(() => {
-      setDots(prev => [...prev, prev.length]);
+      setDots(prev => [...prev, prev.length]);//現在のドットの数を取得し、次のドットを追加
       setDotCount(prev => {
         const next = prev + 1;
         if (next === MAX_DOTS) {
-          clearInterval(intervalRef.current);
+          clearInterval(intervalRef.current);//ドットの数が最大数に達したら、インターバルをクリア,これ以上の追加を行わない
           if (!stopped) {
-            alert("ざんねん！");
+            alert("ざんねん！");//アラートの表示
           }
         }
-        return next;
+        return next;//それ以外の処理
       });
     }, 100);
   };
-
+  //ストップボタンを押したときの挙動を監視する
+  //ストップボタンを押すと、インターバルをクリアし、ドットの数をリセット
+  //ドットの数が10ならおめでとう、そうでなければざんねんとアラートを表示
   const stop = () => {
     if (intervalRef.current) clearInterval(intervalRef.current);
     setStopped(true);
@@ -42,11 +45,13 @@ function App() {
       alert("ざんねん！");
     }
   };
-
+  //ここから先はアプリの表示部分
+  //スタートボタンとストップボタンを配置し、ドットのコンテナを表示
+  //ドットのコンテナには、ドットの数に応じてドットを配置
   return (
     <div style={{ padding: 32 }}>
       <button onClick={start}>スタート</button>
-      <button onClick={stop} style={{ marginLeft: 8 }}>ストップ</button>
+      <button onClick={stop} style={{ marginLeft: 8 }}>ストップ</button>//ボタンの配置
       <div
         id="dot-container"
         style={{
@@ -57,6 +62,7 @@ function App() {
           marginTop: 20,
         }}
       >
+        {/* ドットのコンテナ、位置の設定 */}
         {dots.map((n, i) => (
           <div
             key={i}
@@ -70,6 +76,7 @@ function App() {
               left: i * (DOT_SIZE + DOT_MARGIN),
               top: 0,
             }}
+            // 10番目のドットは特別なスタイルを適用,それ以外は通常のスタイル
           />
         ))}
       </div>
