@@ -28,7 +28,7 @@ function App() {
         }
         return next;
       });
-    }, 1000);
+    }, 100);
   };
 
   const stop = () => {
