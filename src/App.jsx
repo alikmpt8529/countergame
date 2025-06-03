@@ -13,11 +13,19 @@ function App() {
 
   // ドットの数が最大数に達したときの挙動を監視する,アラートの実施
   useEffect(() => {
+    let timeoutId = null;
     if (dotCount === MAX_DOTS && !stopped) {
-      alert("ざんねん！"); // "Too bad!" - when MAX_DOTS is reached automatically
+      // アラートを少し遅らせて、ドットの描画が完了する可能性を高めます。
+      // これにより、特にプロダクションビルドでアラートが描画より先に表示される問題を軽減します。
+      timeoutId = setTimeout(() => {
+        alert("ざんねん！"); // "Too bad!" - when MAX_DOTS is reached automatically
+      }, 0); // 0ミリ秒の遅延でも、次のイベントサイクルに処理を移す効果があります
     }
+    // クリーンアップ関数: コンポーネントのアンマウント時や依存配列の値が変更される前にタイムアウトをクリア
+    return () => {
+      if (timeoutId) clearTimeout(timeoutId);
+    };
   }, [dotCount, stopped]); // Rerun this effect if dotCount or stopped changes
-
   //ここから先はスタートボタンを押した後の挙動を監視する
   // 100ミリ秒ごとに次のドットを追加
   const start = () => {
