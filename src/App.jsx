@@ -51,7 +51,8 @@ function App() {
   return (
     <div style={{ padding: 32 }}>
       <button onClick={start}>スタート</button>
-      <button onClick={stop} style={{ marginLeft: 8 }}>ストップ</button>//ボタンの配置
+      <button onClick={stop} style={{ marginLeft: 8 }}>ストップ</button>
+      {/* ボタンの配置 */}
       <div
         id="dot-container"
         style={{
