@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import './App.css'
 //ドットのサイズ、ドット間の距離、最大数を設定
 const DOT_SIZE = 20;
@@ -10,24 +10,32 @@ function App() {
   const [dotCount, setDotCount] = useState(0);//ドットの数を設定初期値は０
   const [stopped, setStopped] = useState(false);//ストップ状態かどうかを監視、デフォルトではfalse
   const intervalRef = useRef(null);
+
+  // ドットの数が最大数に達したときの挙動を監視する,アラートの実施
+  useEffect(() => {
+    if (dotCount === MAX_DOTS && !stopped) {
+      alert("ざんねん！"); // "Too bad!" - when MAX_DOTS is reached automatically
+    }
+  }, [dotCount, stopped]); // Rerun this effect if dotCount or stopped changes
+
   //ここから先はスタートボタンを押した後の挙動を監視する
-  // 100ミリ秒ごとに次のドットを追加し、最大数に達したらアラートを表示する
+  // 100ミリ秒ごとに次のドットを追加
   const start = () => {
     setDots([]);
     setDotCount(0);
     setStopped(false);
-    if (intervalRef.current) clearInterval(intervalRef.current);
+    if (intervalRef.current) {
+      clearInterval(intervalRef.current);
+    }
     intervalRef.current = setInterval(() => {
       setDots(prev => [...prev, prev.length]);//現在のドットの数を取得し、次のドットを追加
       setDotCount(prev => {
         const next = prev + 1;
         if (next === MAX_DOTS) {
           clearInterval(intervalRef.current);//ドットの数が最大数に達したら、インターバルをクリア,これ以上の追加を行わない
-          if (!stopped) {
-            alert("ざんねん！");//アラートの表示
-          }
+          // The alert is now handled by the useEffect hook
         }
-        return next;//それ以外の処理
+        return next;
       });
     }, 100);
   };
@@ -77,7 +85,7 @@ function App() {
               left: i * (DOT_SIZE + DOT_MARGIN),
               top: 0,
             }}
-            // 10番目のドットは特別なスタイルを適用、それ以外は通常のスタイルを適用
+          // 10番目のドットは特別なスタイルを適用、それ以外は通常のスタイルを適用
           />
         ))}
       </div>
