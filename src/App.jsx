@@ -19,6 +19,14 @@ function App() {
       // これにより、特にプロダクションビルドでアラートが描画より先に表示される問題を軽減します。
       timeoutId = setTimeout(() => {
         alert("ざんねん！"); // "Too bad!" - when MAX_DOTS is reached automatically
+        // アラート表示後、ドットを初期化
+        if (intervalRef.current) {
+          clearInterval(intervalRef.current);
+          intervalRef.current = null; // intervalRefもクリア
+        }
+        setDots([]);
+        setDotCount(0);
+        setStopped(true); // ゲームを停止状態にする
       }, 100); // 遅延時間を0ミリ秒から100ミリ秒に変更
     }
     // クリーンアップ関数: コンポーネントのアンマウント時や依存配列の値が変更される前にタイムアウトをクリア
@@ -67,7 +75,13 @@ function App() {
   return (
     <div style={{ padding: 32 }}>
       <button onClick={start}>スタート</button>
-      <button onClick={stop} style={{ marginLeft: 8 }}>ストップ</button>
+      <button
+        onClick={stop}
+        style={{ marginLeft: 8 }}
+        disabled={stopped || dotCount === 0} // ゲームが停止中またはドットがない場合は無効
+      >
+        ストップ
+      </button>
       {/* ボタンの配置 */}
       <div
         id="dot-container"
